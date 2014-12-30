@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <objectFactory type="net.juniper.easyrest.yang.mapping.helper.MappingObjectFactory">
+    </objectFactory>
+    <objectWrapperFactory type="net.juniper.easyrest.yang.mapping.helper.MappingObjectWrapperFactory">
+    </objectWrapperFactory>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+               <property name="driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+               <property name="url" value="jdbc:derby:../../DummyDB;create=true" />
+            </dataSource>
+       </environment>
+    </environments>
+    <mappers>
+        <mapper resource="orm-mapper.xml"/>
+        <package name="net.juniper.db.mapper"/>
+    </mappers>
+</configuration>

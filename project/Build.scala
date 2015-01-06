@@ -55,9 +55,11 @@ object Build extends Build {
     yangPackageName := Option("net.juniper.yang")
   ) ++ Revolver.settings ++ jacoco.settings ++ instrumentSettings ++ scalariformSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ XitrumPackage.copy()
 
-  lazy val root = Project("js-ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "runner.sh", "runner.bat")).aggregate(emsDevice)
+  lazy val root = Project("js-ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat")).aggregate(server, emsBoot)
 
-  lazy val emsDevice = Project("ems-device", file("ems-device"), settings = gSettings ++ yangSettings)
+  lazy val server = Project("server", file("server"), settings = gSettings ++ yangSettings)
+
+  lazy val emsBoot = Project("ems-boot", file("ems-boot"), settings = gSettings ++ yangSettings).dependsOn(server)
   /**
    * Generate code from YANG via JNC
    */
@@ -102,9 +104,8 @@ object Build extends Build {
   }
 
   def extractYangDependencies(libs: Seq[Attributed[File]], log: Logger): Unit = {
-    val tmpDir = System.getProperty("user.home") + "/tmp"
-    val yangDir = tmpDir + "/yang"
-    val args = Seq("-rf", yangDir)
+    val yangDir = System.getProperty("user.home") + "/.yang"
+    val args = Seq("-rf", yangDir + "/*")
     Process("rm", args) ! log
     new File(yangDir).mkdirs()
 
@@ -118,7 +119,7 @@ object Build extends Build {
             val entries = jarFile.entries
             for (entry <- entries) {
               if(entry.getName.startsWith("yang/") && entry.getName.endsWith(".yang")) {
-                val targetFile = new File(tmpDir + "/" + entry.getName)
+                val targetFile = new File(yangDir + "/" + entry.getName.substring("yang/".length))
                 IO.write(targetFile, IO.readBytes(jarFile.getInputStream(entry)))
               }
             }
@@ -131,11 +132,11 @@ object Build extends Build {
   def getYangDependencies(modules: Seq[sbt.ModuleID], moduleRoot: String): String = {
     val dArr = ArrayBuffer[String]()
     //add dependency path
-    dArr += System.getProperty("user.home") + "/tmp/yang"
+    dArr += System.getProperty("user.home") + "/.yang"
 
     //add dependency module paths
     for (module <- modules)
-    dArr += root.base.getAbsolutePath + "/" + module.name + "/src/main/resources/yang"
+      dArr += root.base.getAbsolutePath + "/" + module.name + "/src/main/resources/yang"
 
     //add current module path
     dArr += moduleRoot + "/src/main/resources/yang"

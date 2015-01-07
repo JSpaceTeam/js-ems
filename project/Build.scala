@@ -23,7 +23,7 @@ object Build extends Build {
 
   var gSettings = Defaults.coreDefaultSettings ++ Seq(
     scalaVersion  := "2.11.4",
-    organization  := "net.juniper.productname",
+    organization  := "net.juniper",
     version       := "0.1.1",
     scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
     libraryDependencies ++= Seq(
@@ -50,16 +50,16 @@ object Build extends Build {
       else false
     },
     publishMavenStyle := true,
-    publishTo := Some(Resolver.file("file",  new File("../mavenrepo/release"))),
-    resolvers += "JSpace Maven Repo" at "https://raw.github.com/JSpaceTeam/mavenrepo/master/release",
+    publishTo := Some(Resolver.file("file",  new File(System.getProperty("user.home") + "/mavenrepo/release"))),
+    resolvers += "JSpace Maven Repo" at "http://10.155.87.253:8080/mavenrepo/release",
     yangPackageName := Option("net.juniper.yang")
   ) ++ Revolver.settings ++ jacoco.settings ++ instrumentSettings ++ scalariformSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ XitrumPackage.copy()
 
-  lazy val root = Project("js-ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat")).aggregate(server, emsBoot)
+  lazy val root = Project("jspace-ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat")).aggregate(server, emsBoot)
 
-  lazy val server = Project("server", file("server"), settings = gSettings ++ yangSettings)
+  lazy val server = Project("jspace-ems-server", file("server"), settings = gSettings ++ yangSettings)
 
-  lazy val emsBoot = Project("ems-boot", file("ems-boot"), settings = gSettings ++ yangSettings).dependsOn(server)
+  lazy val emsBoot = Project("jspace-ems-boot", file("ems-boot"), settings = gSettings ++ yangSettings).dependsOn(server)
   /**
    * Generate code from YANG via JNC
    */

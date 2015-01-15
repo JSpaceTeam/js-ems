@@ -395,9 +395,7 @@ module device-management {
                 description "Device WebUI enabled";
             }
         }
-        // container mgtConnection
 
-        // IFMAP 'has' links
         list interface {
             uses ifmap:HasLink;
             key uuid;
@@ -407,57 +405,47 @@ module device-management {
             key uuid;
         }
 
-        container configurations {
-            description "Device configurations";
-
-            //IFMAP 'has' links
-            list activeConfigurations {
-                uses ifmap:HasLink;
-                key uuid;
-            }
-            list templates {
-                uses ifmap:HasLink;
-                key uuid;
-            }
-            list oobChanges {
-                uses ifmap:HasLink;
-                key uuid;
-            }
-            list changeLogs {
-                uses ifmap:HasLink;
-                key uuid;
-            }
+        list activeConfigurations {
+            uses ifmap:HasLink;
+            key uuid;
+        }
+        list templates {
+            uses ifmap:HasLink;
+            key uuid;
+        }
+        list oobChanges {
+            uses ifmap:HasLink;
+            key uuid;
+        }
+        list changeLogs {
+            uses ifmap:HasLink;
+            key uuid;
         }
 
-        container operations {
-            // IFMAP 'has' links
-            list associatedScripts {
-                uses ifmap:HasLink;
-                key uuid;
-            }
-            list scriptExecutionHistories {
-                uses ifmap:HasLink;
-                key uuid;
-            }
-            list partitions {
-                uses ifmap:HasLink;
-                key uuid;
-            }
+        list associatedScripts {
+            uses ifmap:HasLink;
+            key uuid;
+        }
+        list scriptExecutionHistories {
+            uses ifmap:HasLink;
+            key uuid;
+        }
+        list partitions {
+            uses ifmap:HasLink;
+            key uuid;
         }
 
-        container os {
-            list stagedImages {
-                uses ifmap:HasLink;
-                key uuid;
-            }
-            list softwares {
-                uses ifmap:HasLink;
-                key uuid;
-            }
-            list licenseUsageSummary {
-                uses ifmap:HasLink;
-                key uuid;
-            }
+        list stagedImages {
+            uses ifmap:HasLink;
+            key uuid;
+        }
+        list softwares {
+            uses ifmap:HasLink;
+            key uuid;
+        }
+        list licenseUsageSummary {
+            uses ifmap:HasLink;
+            key uuid;
         }
     }
 
@@ -531,7 +519,7 @@ module device-management {
         }
     }
 
-    list physicalInterface {
+    list  physical-interface {
         description "Physical interfaces";
         uses ifmap:Identity;
         key uuid;

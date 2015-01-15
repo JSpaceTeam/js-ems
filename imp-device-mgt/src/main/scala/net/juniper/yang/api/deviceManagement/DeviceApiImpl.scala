@@ -15,11 +15,33 @@ class DeviceApiImpl extends DeviceApi {
     }
   }
 
-  def updateDevice(device: Device, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = { Future { None } }
+  def updateDevice(device: Device, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = {
+    Future {
+      val dev = new Device("a")
+      dev.setDisplayNameValue("Device was updated")
+      Some(dev)
+    }
+  }
 
-  def createDevice(device: Device, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = { Future { None } }
+  def createDevice(device: Device, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = {
+    Future {
+      val dev = new Device("b")
+      dev.setDisplayNameValue("Device was created")
+      Some(dev)
+    }
+  }
 
-  def getDeviceByUuid(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = { Future { None } }
+  def getDeviceByUuid(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = {
+    Future {
+      val dev = new Device("a")
+      dev.setDisplayNameValue("Device was fetched")
+      Some(dev)
+    }
+  }
 
-  def deleteDevice(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Unit]] = { Future { None } }
+  def deleteDevice(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Unit]] = {
+    Future {
+      Some(Unit)
+    }
+  }
 }

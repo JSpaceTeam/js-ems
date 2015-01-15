@@ -14,6 +14,6 @@ object EmsBoot extends App with DatabaseSupport with EasyRestSubSystemInit {
 class EmsBootstrap extends Bootstrap[EmsActor]
 
 //This actor should be generated from Yang
-class EmsActor extends EasyRestActor with EmsServerAllRoutes with KeystoneRouting {
-  def getRoute = emsServerAllRoutes ~ keystoneRouting
+class EmsActor extends EasyRestActor with EmsServerAllRoutes {
+  def getRoute = emsServerAllRoutes
 }

@@ -1,5 +1,4 @@
 import java.io.File
-import java.util.jar.JarFile
 
 import com.typesafe.sbt.SbtScalariform._
 import com.typesafe.sbteclipse.core.EclipsePlugin.{EclipseCreateSrc, EclipseKeys}
@@ -8,8 +7,7 @@ import sbt.Keys._
 import sbt._
 import scoverage.ScoverageSbtPlugin._
 import spray.revolver.RevolverPlugin.Revolver
-import scala.collection.JavaConversions._
-import scala.collection.mutable.ArrayBuffer
+import net.juniper.yang.YangPlugin
 
 object Build extends Build {
 
@@ -18,8 +16,6 @@ object Build extends Build {
   val sprayV = "1.3.2"
 
   var spray_jsonV = "1.2.6"
-
-  val yangPackageName = SettingKey[Option[String]]("yang-package-name")
 
   var gSettings = Defaults.coreDefaultSettings ++ Seq(
     scalaVersion  := "2.11.4",
@@ -49,110 +45,21 @@ object Build extends Build {
       if (scalaBinaryVersion.value == "2.10") false
       else false
     },
+    YangPlugin.yangPackageName := Some("net.juniper.yang"),
+    YangPlugin.routesTraitName := None,
     publishMavenStyle := true,
     publishTo := Some(Resolver.file("file",  new File(System.getProperty("user.home") + "/mavenrepo/release"))),
-    resolvers += "JSpace Maven Repo" at "http://10.155.87.253:8080/mavenrepo/release",
-    yangPackageName := Option("net.juniper.yang")
-  ) ++ Revolver.settings ++ jacoco.settings ++ instrumentSettings ++ scalariformSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ XitrumPackage.copy()
+    resolvers += "JSpace Maven Repo" at "http://10.155.87.253:8080/mavenrepo/release"
+  ) ++ Revolver.settings ++ jacoco.settings ++ instrumentSettings ++ scalariformSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ XitrumPackage.copy() ++ YangPlugin.yangSettings
 
-  lazy val root = Project("jspace-ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat")).aggregate(server, emsBoot)
+  lazy val root = Project("jspace-ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat")).aggregate(server, deviceMgt, emsBoot)
 
-  lazy val server = Project("jspace-ems-server", file("server"), settings = gSettings ++ yangSettings)
+  lazy val server = Project("jspace-ems-server", file("server"), settings = gSettings ++ Seq(
+    YangPlugin.routesTraitName := Some("EmsServerAllRoutes")
+  ))
 
-  lazy val emsBoot = Project("jspace-ems-boot", file("ems-boot"), settings = gSettings ++ yangSettings).dependsOn(server)
-  /**
-   * Generate code from YANG via JNC
-   */
-  val Yang = config("yang")
-  val yangGenerate = TaskKey[Seq[File]]("yang-generate")
+  lazy val deviceMgt = Project("jspace-device-mgt", file("imp-device-mgt"), settings = gSettings).dependsOn(server)
 
-  def yangGeneratorTask: Def.Initialize[Task[Seq[File]]] = Def.task {
-    val cachedCompile = FileFunction.cached(streams.value.cacheDirectory / "yang", FilesInfo.lastModified, FilesInfo.exists) {
-      in: Set[File] =>
-        extractYangDependencies((managedClasspath in Runtime).value ++ (unmanagedClasspath in Runtime).value, streams.value.log)
-        runJncGen(
-          srcFiles = in,
-          srcDir = (resourceDirectory in Yang).value,
-          targetBaseDir = (javaSource in Yang).value,
-          log = streams.value.log,
-          packageName = (yangPackageName in Yang).value,
-          dependencyModules = (projectDependencies in Compile).value,
-          moduleRoot = baseDirectory.value.getAbsolutePath
-        )
-    }
-    cachedCompile(((resourceDirectory in Yang).value ** "*.yang").get.toSet).toSeq
-  }
-
-  def runJncGen( srcFiles: Set[File],
-                 srcDir: File,
-                 targetBaseDir: File,
-                 log: Logger,
-                 packageName: Option[String], dependencyModules: Seq[sbt.ModuleID], moduleRoot: String): Set[File] = {
-    val targetDir = packageName.map {
-      _.split('.').foldLeft(targetBaseDir) {
-        _ / _
-      }
-    }.getOrElse(targetBaseDir)
-    val baseArgs = Seq("-p", getYangDependencies(dependencyModules, moduleRoot), "-f", "jnc", "-d", targetDir.getAbsolutePath, "--jnc-no-pkginfo", "--jnc-classpath-schema-loading")
-    srcFiles map { file =>
-      println("generating :" + file.toString)
-      val args = baseArgs ++ Seq(file.toString)
-      val exitCode = Process("pyang", args) ! log
-      if (exitCode != 0) sys.error(s"pyang failed with exit code $exitCode")
-    }
-    (targetDir ** "*.java").get.toSet ++ (targetDir ** "*.scala").get.toSet
-  }
-
-  def extractYangDependencies(libs: Seq[Attributed[File]], log: Logger): Unit = {
-    val yangDir = System.getProperty("user.home") + "/.yang"
-    val args = Seq("-rf", yangDir + "/*")
-    Process("rm", args) ! log
-    new File(yangDir).mkdirs()
-
-    libs.foreach { lib =>
-      val file = lib.data
-      if (file.exists) {
-        if (!file.isDirectory && file.getName.endsWith(".jar")) {
-          val jarFile = new JarFile(file)
-          val yangEntry = jarFile.getEntry("yang")
-          if (yangEntry != null) {
-            val entries = jarFile.entries
-            for (entry <- entries) {
-              if(entry.getName.startsWith("yang/") && entry.getName.endsWith(".yang")) {
-                val targetFile = new File(yangDir + "/" + entry.getName.substring("yang/".length))
-                IO.write(targetFile, IO.readBytes(jarFile.getInputStream(entry)))
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  def getYangDependencies(modules: Seq[sbt.ModuleID], moduleRoot: String): String = {
-    val dArr = ArrayBuffer[String]()
-    //add dependency path
-    dArr += System.getProperty("user.home") + "/.yang"
-
-    //add dependency module paths
-    for (module <- modules)
-      dArr += root.base.getAbsolutePath + "/" + module.name + "/src/main/resources/yang"
-
-    //add current module path
-    dArr += moduleRoot + "/src/main/resources/yang"
-
-    dArr.mkString(":")
-  }
-
-  val yangSettings = inConfig(Yang)(Seq(
-    resourceDirectory <<= (resourceDirectory in Compile) {_ / "yang"},
-    javaSource <<= sourceManaged in Compile,
-    yangGenerate <<= yangGeneratorTask,
-    yangPackageName <<= yangPackageName in Yang
-  )) ++ Seq(
-    managedSourceDirectories in Compile <+= (javaSource in Yang),
-    sourceGenerators in Compile <+= (yangGenerate in Yang),
-    cleanFiles <+= (javaSource in Yang)
-  )
+  lazy val emsBoot = Project("jspace-ems-boot", file("ems-boot"), settings = gSettings).dependsOn(server, deviceMgt)
 
 }

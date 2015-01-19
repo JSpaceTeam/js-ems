@@ -82,6 +82,8 @@ public abstract class YangElement extends Element {
             }
         }
         catch(Exception e) {
+            //TODO need a logger
+            e.printStackTrace();
             throw new YangException(YangException.ELEMENT_MISSING, "Error while setting value by path:" + path);
         }
     }

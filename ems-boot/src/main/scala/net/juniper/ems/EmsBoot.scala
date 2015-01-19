@@ -7,11 +7,11 @@ import net.juniper.easyrest.persistence.DatabaseSupport
 import net.juniper.easyrest.rest.KeystoneRouting
 import net.juniper.yang.EmsServerAllRoutes
 
-object EmsBoot extends App with DatabaseSupport with EasyRestSubSystemInit {
+object EmsBoot extends App {
   new EmsBootstrap().start()
 }
 
-class EmsBootstrap extends Bootstrap[EmsActor]
+class EmsBootstrap extends Bootstrap[EmsActor] with DatabaseSupport with EasyRestSubSystemInit
 
 //This actor should be generated from Yang
 class EmsActor extends EasyRestActor with EmsServerAllRoutes {

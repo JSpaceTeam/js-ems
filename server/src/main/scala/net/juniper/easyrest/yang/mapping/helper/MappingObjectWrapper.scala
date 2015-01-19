@@ -33,8 +33,11 @@ class MappingObjectWrapper(sqlUnit: SqlUnitQuery, obj: YangElement, metaObject: 
       obj.setAttr(selectPart._noMapping, newValue.toString)
     else {
       obj.setMethodByPath(selectPart._mapping, newValue);
-//      obj.createChild(selectPart._mapping).setValue(newValue)
+      //      obj.createChild(selectPart._mapping).setValue(newValue)
     }
+//    println(selectPart._mapping)
+//    println(obj.getChildren("uuid"))
+    obj
   }
 
   def findProperty(name: String, useCamelCaseMapping: Boolean): String = {
@@ -52,6 +55,8 @@ class MappingObjectWrapper(sqlUnit: SqlUnitQuery, obj: YangElement, metaObject: 
   def getSetterType(name: String): Class[_] = {
     val field = fieldsMap(name.toUpperCase)
     //It's not static field in Yang Object
+    println(field._mapping+"::::"+YangTypeUtil.getJavaType(obj, field._mapping))
+
     if (field._noMapping != null)
       classOf[Integer]
     else {

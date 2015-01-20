@@ -1,10 +1,10 @@
 package net.juniper.easyrest.yang.mapping.helper
 
-import java.sql.{CallableStatement, PreparedStatement, ResultSet}
+import java.sql.{ CallableStatement, PreparedStatement, ResultSet }
 
 import com.tailf.jnc.YangType
 import net.juniper.yang.mo.ietfYangTypes.Uuid
-import org.apache.ibatis.`type`.{BaseTypeHandler, JdbcType}
+import org.apache.ibatis.`type`.{ BaseTypeHandler, JdbcType }
 
 /**
  * Created by maxin on 15-1-19.
@@ -13,8 +13,7 @@ class YangTypeHandler[T <: Uuid](yangType: Class[T]) extends BaseTypeHandler[T] 
   override def setNonNullParameter(ps: PreparedStatement, i: Int, parameter: T, jdbcType: JdbcType): Unit = {
     if (jdbcType == null) {
       ps.setString(i, parameter.toString)
-    }
-    else {
+    } else {
       ps.setObject(i, parameter.toString, jdbcType.TYPE_CODE)
     }
   }
@@ -23,9 +22,8 @@ class YangTypeHandler[T <: Uuid](yangType: Class[T]) extends BaseTypeHandler[T] 
     val s = rs.getString(columnName)
     if (s != null) {
       val constructor = yangType.getDeclaredConstructor(classOf[String]);
-     constructor.newInstance(s).asInstanceOf[T]
-    }
-    else {
+      constructor.newInstance(s).asInstanceOf[T]
+    } else {
       yangType.newInstance().asInstanceOf[T]
     }
   }
@@ -35,8 +33,7 @@ class YangTypeHandler[T <: Uuid](yangType: Class[T]) extends BaseTypeHandler[T] 
     if (s != null) {
       val constructor = yangType.getDeclaredConstructor(classOf[String]);
       constructor.newInstance(s).asInstanceOf[T]
-    }
-    else {
+    } else {
       yangType.newInstance().asInstanceOf[T]
     }
   }
@@ -46,8 +43,7 @@ class YangTypeHandler[T <: Uuid](yangType: Class[T]) extends BaseTypeHandler[T] 
     if (s != null) {
       val constructor = yangType.getDeclaredConstructor(classOf[String]);
       constructor.newInstance(s).asInstanceOf[T]
-    }
-    else {
+    } else {
       yangType.newInstance().asInstanceOf[T]
     }
   }

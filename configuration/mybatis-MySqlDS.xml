@@ -2,10 +2,6 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <!--com.tailf.jnc.YangElement-->
-    <typeHandlers>
-        <typeHandler handler="net.juniper.easyrest.yang.mapping.helper.YangTypeHandler" javaType="net.juniper.yang.mo.ietfYangTypes.Uuid"/>
-    </typeHandlers>
     <objectFactory type="net.juniper.easyrest.yang.mapping.helper.MappingObjectFactory">
     </objectFactory>
     <objectWrapperFactory type="net.juniper.easyrest.yang.mapping.helper.MappingObjectWrapperFactory">

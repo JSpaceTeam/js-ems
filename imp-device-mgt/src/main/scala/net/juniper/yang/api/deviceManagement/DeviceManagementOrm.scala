@@ -22,11 +22,11 @@ object QueryDeviceOrm extends YangMappingQueryDSL {
   }
   select("dc.connStatus") mapping "mgtConnection/status" fromIndex 1 mappingFunc {
     (value, obj, apiCtx) =>
-      if(value == null)
+      if (value == null)
         "NA"
-      else if(value == "0")
+      else if (value == "0")
         "UP"
-      else if(value == "1")
+      else if (value == "1")
         "DOWN"
       else
         "NA"

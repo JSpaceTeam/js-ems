@@ -1101,22 +1101,4 @@ module device-management {
             description "License state";
         }
     }
-
-    rpc reboot-device {
-        description "Send get system information request";
-
-        input {
-            list licenseSkuFeature1 {
-                uses ifmap:Identity;
-                key uuid;
-            }
-        }
-
-        output {
-            list licenseSkuFeature2 {
-                    uses ifmap:Identity;
-                    key uuid;
-            }
-        }
-    }
 }

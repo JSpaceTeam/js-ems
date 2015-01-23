@@ -7,7 +7,6 @@ import sbt.Keys._
 import sbt._
 import scoverage.ScoverageSbtPlugin._
 import spray.revolver.RevolverPlugin.Revolver
-import net.juniper.yang.YangPlugin
 
 object Build extends Build {
 

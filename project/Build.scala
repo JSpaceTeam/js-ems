@@ -7,6 +7,7 @@ import sbt.Keys._
 import sbt._
 import scoverage.ScoverageSbtPlugin._
 import spray.revolver.RevolverPlugin.Revolver
+import net.juniper.yang.YangPlugin
 
 object Build extends Build {
 
@@ -22,20 +23,20 @@ object Build extends Build {
     version       := "0.1.2",
     scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
     libraryDependencies ++= Seq(
-      "io.spray"            %%  "spray-can"     % sprayV,
-      "io.spray"            %%  "spray-routing" % sprayV,
-      "io.spray"            %%  "spray-client"  % sprayV,
-      "io.spray"            %%  "spray-json"    % spray_jsonV,
-      "io.spray"            %%  "spray-testkit" % sprayV  % "test",
-      "com.typesafe.akka"   %%  "akka-actor"    % akkaV,
-      "com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test",
-      "org.specs2"          %%  "specs2-core"   % "2.3.11",
-      "net.juniper"         %% "easy-rest-core" % "0.1.2",
-      "net.juniper"         %% "easy-rest-persistence" % "0.1.2",
-      "net.juniper"         %% "easy-rest-orm" % "0.1.2",
-      "net.juniper"         % "jnc-library" % "0.1.2",
-      "ch.qos.logback"      %   "logback-classic" % "1.1.2",
-      "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
+      "io.spray"            %%  "spray-can"     % sprayV withSources(),
+      "io.spray"            %%  "spray-routing" % sprayV withSources(),
+      "io.spray"            %%  "spray-client"  % sprayV withSources(),
+      "io.spray"            %%  "spray-json"    % spray_jsonV withSources(),
+      "io.spray"            %%  "spray-testkit" % sprayV  % "test" withSources(),
+      "com.typesafe.akka"   %%  "akka-actor"    % akkaV withSources(),
+      "com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test" withSources(),
+      "org.specs2"          %%  "specs2-core"   % "2.3.11" withSources(),
+      "net.juniper"         %% "easy-rest-core" % "0.1.2" withSources(),
+      "net.juniper"         %% "easy-rest-persistence" % "0.1.2" withSources(),
+      "net.juniper"         %% "easy-rest-orm" % "0.1.2" withSources(),
+      "net.juniper"         % "jnc-library" % "0.1.2" withSources(),
+      "ch.qos.logback"      %   "logback-classic" % "1.1.2" withSources(),
+      "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0" withSources()
     ),
     EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Managed,
     ScoverageKeys.minimumCoverage := 70,

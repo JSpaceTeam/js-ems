@@ -49,6 +49,7 @@ object Build extends Build {
     YangPlugin.routesTraitName := None,
     publishMavenStyle := true,
     publishTo := Some(Resolver.file("file",  new File(System.getProperty("user.home") + "/mavenrepo/release"))),
+    resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/mavenrepo/release",
     resolvers += "JSpace Maven Repo" at "http://10.155.87.253:8080/mavenrepo/release"
   ) ++ Revolver.settings ++ jacoco.settings ++ instrumentSettings ++ scalariformSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ XitrumPackage.copy() ++ YangPlugin.yangSettings
 

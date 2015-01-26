@@ -31,9 +31,9 @@ object Build extends Build {
       "com.typesafe.akka"   %%  "akka-actor"    % akkaV withSources(),
       "com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test" withSources(),
       "org.specs2"          %%  "specs2-core"   % "2.3.11" withSources(),
-      "net.juniper"         %% "easy-rest-core" % "0.1.2" withSources(),
-      "net.juniper"         %% "easy-rest-persistence" % "0.1.2" withSources(),
-      "net.juniper"         %% "easy-rest-orm" % "0.1.2" withSources(),
+      "net.juniper"         %% "easy-rest-core" % "0.1.3" withSources(),
+      "net.juniper"         %% "easy-rest-persistence" % "0.1.3" withSources(),
+      "net.juniper"         %% "easy-rest-orm" % "0.1.3" withSources(),
       "net.juniper"         % "jnc-library" % "0.1.2" withSources(),
       "ch.qos.logback"      %   "logback-classic" % "1.1.2" withSources(),
       "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0" withSources()

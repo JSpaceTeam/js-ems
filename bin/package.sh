@@ -2,7 +2,7 @@
 
 CURRDIR=`pwd`
 BASEDIR=$CURRDIR/..
-DISTDIR=$BASEDIR/target/dist
+DISTDIR=$BASEDIR/target/dist/js-ems
 
 package(){
     rm -rf $DISTDIR/*

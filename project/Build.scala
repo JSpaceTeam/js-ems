@@ -35,7 +35,7 @@ object Build extends Build {
       "net.juniper"         %% "easy-rest-persistence" % "0.1.4" withSources(),
       "net.juniper"         %% "easy-rest-orm" % "0.1.4" withSources(),
       "net.juniper"         %% "easy-rest-integration-patterns" % "0.1.4" withSources(),
-      "net.juniper"         % "jnc-library" % "0.1.2" withSources(),
+      "net.juniper"         % "jnc-library" % "0.1.3" withSources(),
       "ch.qos.logback"      %   "logback-classic" % "1.1.2" withSources(),
       "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0" withSources()
     ),

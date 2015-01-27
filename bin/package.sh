@@ -24,6 +24,7 @@ package(){
               cp -rf $BASEDIR/$dir/target/xitrum/* $DISTDIR
            fi
         done
+    rm -rf $DISTDIR/lib/*-sources.jar   
 }
 
 package

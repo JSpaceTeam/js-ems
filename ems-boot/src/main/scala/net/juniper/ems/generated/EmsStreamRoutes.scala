@@ -16,27 +16,26 @@ import spray.routing.directives.RefFactoryMagnet
  */
 trait EmsStreamRoutes extends EasyRestRoutingDSL with LazyLogging with HttpService {
 
-   //Each stream should be registered
+  //Each stream should be registered
 
-    StreamRegistry.registerStream(
-      new Stream()
-        .name("database-changes")
-        .description("Stream for all database change events")
-        .replaySupport("false")
-        .events("")
-    )
+  StreamRegistry.registerStream(
+    new Stream()
+      .name("database-changes")
+      .description("Stream for all database change events")
+      .replaySupport("false")
+      .events("")
+  )
 
-    val streamsRestApiRouting = compressResponseIfRequested(new RefFactoryMagnet()) {
-      get {
-        path(ROUTING_PREFIX / ROUTING_STREAMS_PREFIX / ROUTING_STREAM_PREFIX / "database-changes" / ROUTING_EVENTS_PREFIX) {
-          authenticate(EasyRestAuthenticator()) { apiCtx =>
-            authorize(enforce(apiCtx)) {
-              intercept(apiCtx) {
-                compressResponse(Gzip) {
-                  sse { (channel, lastEventId, ctx) =>
+  val streamsRestApiRouting = compressResponseIfRequested(new RefFactoryMagnet()) {
+    get {
+      path(ROUTING_PREFIX / ROUTING_STREAMS_PREFIX / ROUTING_STREAM_PREFIX / "database-changes" / ROUTING_EVENTS_PREFIX) {
+        authenticate(EasyRestAuthenticator()) { apiCtx =>
+          authorize(enforce(apiCtx)) {
+            intercept(apiCtx) {
+              compressResponse(Gzip) {
+                sse { (channel, lastEventId, ctx) =>
                   {
                     NotificationSubscriptionManager.addSubscriber(channel, "database-changes", ctx.request.uri.query.get("stream-filter"))
-                  }
                   }
                 }
               }
@@ -45,4 +44,5 @@ trait EmsStreamRoutes extends EasyRestRoutingDSL with LazyLogging with HttpServi
         }
       }
     }
+  }
 }

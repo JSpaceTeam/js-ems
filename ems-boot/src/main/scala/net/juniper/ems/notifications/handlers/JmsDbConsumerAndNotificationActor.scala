@@ -1,6 +1,5 @@
 package net.juniper.ems.notifications.handlers
 
-
 import akka.camel.CamelMessage
 import com.typesafe.scalalogging.LazyLogging
 import net.juniper.easyrest.notification.EasyRestNotificationConstants.ConnectSubject

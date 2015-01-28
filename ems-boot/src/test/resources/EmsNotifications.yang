@@ -22,9 +22,12 @@ module EmsNotifications {
     }
 
     notification database-changes {
+                description "EMS Database notifications";
+
                 leaf event-time {
                     type yang:timestamp;
                 }
+
                 leaf operation {
                     type operationEnum;
                 }

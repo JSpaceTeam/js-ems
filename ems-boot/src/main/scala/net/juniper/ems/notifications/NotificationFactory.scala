@@ -2,10 +2,10 @@ package net.juniper.ems.notifications
 
 import akka.actor.{ Props, ActorRef }
 import akka.util.Timeout
-import net.juniper.easyrest.messaging.MessagingActor.{ ConsumerCreatedAck, StartConsumerFor }
-import net.juniper.easyrest.messaging.MessagingSubSystem
+import net.juniper.easyrest.intergration.messaging.MessagingActor.{ ConsumerCreatedAck, StartConsumerFor }
+import net.juniper.easyrest.intergration.messaging.MessagingSubSystem
 import net.juniper.easyrest.notification.EasyRestNotificationConstants._
-import net.juniper.easyrest.notification.{EasyRestNotificationHandler, Notification}
+import net.juniper.easyrest.notification.{ EasyRestNotificationHandler, Notification }
 import net.juniper.ems.generated.DatabaseChangesNotification
 import net.juniper.ems.notifications.handlers.JmsDbConsumerAndNotificationActor
 

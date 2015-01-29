@@ -5,14 +5,13 @@ import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
 import net.juniper.easyrest.boot.Bootstrap
-import net.juniper.easyrest.core.{ Configurable, EasyRestActionSystem, EasyRestActor }
+import net.juniper.easyrest.core.{Configurable, EasyRestActionSystem, EasyRestActor}
 import net.juniper.easyrest.intergration.messaging.MessagingSubSystem
-import net.juniper.easyrest.notification._
 import net.juniper.easyrest.rest.EasyRestRoutingDSL
-import net.juniper.easyrest.rest.EasyRestServerSideEventDirective._
-import net.juniper.easyrest.streams.spray.{ StreamRegistry, StreamsRoute }
+import net.juniper.easyrest.streams.spray.{StreamRegistry, StreamsRoute}
 import net.juniper.easyrest.streams.yang.Stream
-import spray.httpx.encoding.Gzip
+import net.juniper.easyrest.testkit.EasyRestRouteTest
+import net.juniper.yang.api.emsNotifications.EmsnotificationRoutes
 import spray.routing._
 
 import scala.concurrent.duration._
@@ -38,7 +37,7 @@ object EventTestApp extends App with Configurable with LazyLogging {
   server.start(Map[String, String]("port" -> "8080", "interface" -> "0.0.0.0"))
 }
 
-class TestActor extends EasyRestActor with TestStreamRoutes {
+class TestActor extends EasyRestActor with TestStreamRoutes with EmsnotificationRoutes with EasyRestRouteTest {
   def getRoute: Route = route()
 
   def route(): Route = {
@@ -52,19 +51,7 @@ class TestActor extends EasyRestActor with TestStreamRoutes {
       } ~
       path("eventsource.js") {
         getFromResource("eventsource.js")
-      } ~
-      path("stream") {
-        get {
-          compressResponse(Gzip) {
-            sse { (channel, lastEventId, ctx) =>
-              {
-                var categoryFilter = ctx.request.uri.query.get("obj-category")
-                NotificationSubscriptionManager.addSubscriber(channel, "database-changes", categoryFilter)
-              }
-            }
-          }
-        }
-      }
+      } ~ emsnotificationRestApiRouting
   }
 }
 

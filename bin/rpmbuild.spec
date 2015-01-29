@@ -30,7 +30,7 @@ cp -r ./* $RPM_BUILD_ROOT%{maintDir}/
 echo "rm -rf $RPM_BUILD_ROOT"
 
 %files
-%attr(550, root, root) %{maintDir}/*
+%attr(755, root, root) %{maintDir}/*
 
 %post
 

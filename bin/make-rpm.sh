@@ -21,7 +21,7 @@ Usage: `basename $0` [flag value]...
 Example: `basename $0` -rpmtop ~/CI/jenkins/jobs/BUILD_js-ems/workspace/rpmbuild -gittop ~/CI/jenkins/jobs/BUILD_js-ems/workspace/js-ems
 
 Flags:
-  -rpmtop: path to Source for rpmbuild, no default
+  -rpmtop: path to rpmbuild, no default
   -gittop: path to Top of Git repository, no default
   -m: 0 not show log; 1 show log; default 1
   -v: JSpace release number, example 11.2
@@ -70,9 +70,10 @@ done
 if [ "$RPM_TOP" = "" ]; then
     die "Please set parameter -rpmtop"
 else
-    if [ ! -d $RPM_TOP ]; then
-        mkdir -p $RPM_TOP
+    if [ -d $RPM_TOP ]; then
+        rm -rf $RPM_TOP
     fi
+    mkdir -p $RPM_TOP
     pushd $RPM_TOP >/dev/null 
     mkdir -p $RPM_TOP/{BUILD,RPMS,SPECS,SRPMS,SOURCES}
     popd >/dev/null

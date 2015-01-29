@@ -5,10 +5,10 @@ import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
 import net.juniper.easyrest.boot.Bootstrap
-import net.juniper.easyrest.core.{Configurable, EasyRestActionSystem, EasyRestActor}
+import net.juniper.easyrest.core.{ Configurable, EasyRestActionSystem, EasyRestActor }
 import net.juniper.easyrest.intergration.messaging.MessagingSubSystem
 import net.juniper.easyrest.rest.EasyRestRoutingDSL
-import net.juniper.easyrest.streams.spray.{StreamRegistry, StreamsRoute}
+import net.juniper.easyrest.streams.spray.{ StreamRegistry, StreamsRoute }
 import net.juniper.easyrest.streams.yang.Stream
 import net.juniper.easyrest.testkit.EasyRestRouteTest
 import net.juniper.yang.api.emsNotifications.EmsnotificationRoutes

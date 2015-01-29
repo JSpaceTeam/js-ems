@@ -1,13 +1,14 @@
 package net.juniper.ems.notifications
 
-import akka.actor.{ Props, ActorRef }
+import java.io.StringWriter
+
+import akka.actor.{ ActorRef, Props }
 import akka.util.Timeout
 import net.juniper.easyrest.intergration.messaging.MessagingActor.{ ConsumerCreatedAck, StartConsumerFor }
 import net.juniper.easyrest.intergration.messaging.MessagingSubSystem
 import net.juniper.easyrest.notification.EasyRestNotificationConstants._
 import net.juniper.easyrest.notification.{ EasyRestNotificationHandler, Notification }
-import net.juniper.ems.generated.DatabaseChangesNotification
-import net.juniper.ems.notifications.handlers.JmsDbConsumerAndNotificationActor
+import net.juniper.ems.notifications.handlers.{ DatabaseChangeNotification, JmsDbConsumerAndNotificationActor }
 
 import scala.concurrent.{ Await, Future }
 
@@ -30,6 +31,7 @@ object NotificationFactory {
 
   private def getDBChangeNotificationHandlerActor(uri: EndPoint): ActorRef = {
     import akka.pattern.ask
+
     import scala.concurrent.duration._
     implicit val timeout = Timeout(10 second)
     var f: Future[Any] = MessagingSubSystem.messagingActor.ask(StartConsumerFor(Props(classOf[JmsDbConsumerAndNotificationActor[Notification]], DB_NOTIFICATION_ENDPOINT), uri))
@@ -43,15 +45,15 @@ object NotificationFactory {
    * @return
    */
   private def getDBChangeNotificationHandler(uri: EndPoint): EasyRestNotificationHandler[_ <: Notification] = {
-    new EasyRestNotificationHandler[DatabaseChangesNotification] {
-      override val convertToJson: (DatabaseChangesNotification) => String = msg => {
-        import net.juniper.ems.generated.DatabaseChangesNotificationProtocol._
-        import spray.json._
-        msg.toJson.toString
+    new EasyRestNotificationHandler[DatabaseChangeNotification] {
+      override val convertToJson: (DatabaseChangeNotification) => String = msg => {
+        val writer = new StringWriter()
+        msg.toJson(writer, false)
+        writer.toString
       }
       override val doFilter: FilterFunction = (msg, filter) => {
         try {
-          msg.asInstanceOf[DatabaseChangesNotification].objType.equals(filter)
+          msg.asInstanceOf[DatabaseChangeNotification].getObjectTypeValue.toString.equals(filter)
         } catch {
           case _: Throwable => false
         }

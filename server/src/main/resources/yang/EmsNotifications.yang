@@ -39,9 +39,7 @@ module EmsNotifications {
                 leaf row-id {
                     type uint32;
                 }
-                leaf uuid {
-                    type string;
-                }
+
                 leaf entity-category {
                     type string;
                 }

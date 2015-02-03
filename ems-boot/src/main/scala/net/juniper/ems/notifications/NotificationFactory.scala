@@ -1,14 +1,13 @@
 package net.juniper.ems.notifications
 
-import java.io.StringWriter
-
 import akka.actor.{ ActorRef, Props }
 import akka.util.Timeout
 import net.juniper.easyrest.intergration.messaging.MessagingActor.{ ConsumerCreatedAck, StartConsumerFor }
 import net.juniper.easyrest.intergration.messaging.MessagingSubSystem
 import net.juniper.easyrest.notification.EasyRestNotificationConstants._
-import net.juniper.easyrest.notification.{ EasyRestNotificationHandler, Notification }
-import net.juniper.ems.notifications.handlers.{ DatabaseChangeNotification, JmsDbConsumerAndNotificationActor }
+import net.juniper.easyrest.notification.EasyRestNotificationHandler
+import net.juniper.ems.notifications.handlers.JmsDbConsumerAndNotificationActor
+import net.juniper.yang.mo.emsNotifications.DatabaseChanges
 
 import scala.concurrent.{ Await, Future }
 
@@ -34,7 +33,7 @@ object NotificationFactory {
 
     import scala.concurrent.duration._
     implicit val timeout = Timeout(10 second)
-    var f: Future[Any] = MessagingSubSystem.messagingActor.ask(StartConsumerFor(Props(classOf[JmsDbConsumerAndNotificationActor[Notification]], DB_NOTIFICATION_ENDPOINT), uri))
+    var f: Future[Any] = MessagingSubSystem.messagingActor.ask(StartConsumerFor(Props(classOf[JmsDbConsumerAndNotificationActor], DB_NOTIFICATION_ENDPOINT), uri))
     var consumer: ConsumerCreatedAck = Await.result(f, 5 second).asInstanceOf[ConsumerCreatedAck]
     consumer.consumer
   }
@@ -44,16 +43,12 @@ object NotificationFactory {
    * @param uri
    * @return
    */
-  private def getDBChangeNotificationHandler(uri: EndPoint): EasyRestNotificationHandler[_ <: Notification] = {
-    new EasyRestNotificationHandler[DatabaseChangeNotification] {
-      override val convertToJson: (DatabaseChangeNotification) => String = msg => {
-        val writer = new StringWriter()
-        msg.toJson(writer, false)
-        writer.toString
-      }
-      override val doFilter: FilterFunction = (msg, filter) => {
+  private def getDBChangeNotificationHandler(uri: EndPoint): EasyRestNotificationHandler[DatabaseChanges] = {
+    new EasyRestNotificationHandler[DatabaseChanges] {
+
+      override val doFilter: (DatabaseChanges, String) => Boolean = (msg, filter) => {
         try {
-          msg.asInstanceOf[DatabaseChangeNotification].getObjectTypeValue.toString.equals(filter)
+          msg.getObjectTypeValue.toString.equals(filter)
         } catch {
           case _: Throwable => false
         }

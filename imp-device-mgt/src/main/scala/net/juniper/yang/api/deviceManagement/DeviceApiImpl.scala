@@ -43,9 +43,9 @@ class DeviceApiImpl extends DeviceApi {
     }
   }
 
-  def deleteDevice(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Unit]] = {
+  def deleteDevice(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = {
     Future {
-      Some(Unit)
+      None
     }
   }
 }

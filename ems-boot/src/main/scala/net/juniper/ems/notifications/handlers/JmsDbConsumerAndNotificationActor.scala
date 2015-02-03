@@ -1,10 +1,12 @@
 package net.juniper.ems.notifications.handlers
 
 import akka.camel.CamelMessage
+import com.tailf.jnc.YangElement
 import com.typesafe.scalalogging.LazyLogging
 import net.juniper.easyrest.notification.EasyRestNotificationConstants.ConnectSubject
 import net.juniper.easyrest.notification.Notification
 import net.juniper.jmp.cmp.systemService.security.ManagedObjectInfo
+import net.juniper.yang.mo.emsNotifications.DatabaseChanges
 import org.apache.camel.CamelException
 import rx.lang.scala.Subject
 
@@ -14,11 +16,11 @@ import rx.lang.scala.Subject
  * subscriber is interested only on the events happening after the subscription
  * Created by jalandip on 11/20/14.
  */
-class JmsDbConsumerAndNotificationActor[T <: Notification](endPoint: String) extends akka.camel.Consumer with LazyLogging {
+class JmsDbConsumerAndNotificationActor(endPoint: String) extends akka.camel.Consumer with LazyLogging {
 
   override def endpointUri: String = endPoint
 
-  var subject: Option[Subject[Notification]] = None
+  var subject: Option[Subject[YangElement]] = None
 
   def receive = {
     case ConnectSubject(sub) => {
@@ -40,15 +42,14 @@ class JmsDbConsumerAndNotificationActor[T <: Notification](endPoint: String) ext
     }
   }
 
-  def convert(message: CamelMessage): DatabaseChangeNotification = {
+  def convert(message: CamelMessage): DatabaseChanges = {
     val msg = message.getBodyAs(classOf[ManagedObjectInfo], camelContext)
-    val dbNotification = new DatabaseChangeNotification();
+    val dbNotification = new DatabaseChanges();
     dbNotification.setEventTimeValue(Notification.getTime());
     dbNotification.setEntityCategoryValue(msg.getEntityCategory)
     dbNotification.setObjectNameValue(msg.getObjName)
     dbNotification.setObjectTypeValue(msg.getObjType)
     dbNotification.setRowIdValue(msg.getRowId)
-    dbNotification.setUuidValue(s"000000${msg.getRowId}")
     dbNotification.setOperationValue(msg.getJpaOperation.toString.toUpperCase)
     dbNotification
   }

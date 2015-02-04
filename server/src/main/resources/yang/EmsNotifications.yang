@@ -1,0 +1,50 @@
+module EmsNotifications {
+    yang-version 1;
+    namespace "http://juniper.net/ns/space/notification/1.0";
+    prefix "emsnotification";
+
+    contact "JUNOS Space <jspace@juniper.net>";
+
+    organization "Juniper Networks";
+    description "EMS YANG module for notification";
+    revision "2014-11-21" {
+        description "Initial version";
+    }
+
+    typedef operationEnum {
+        type enumeration {
+            enum CREATE;
+            enum MODIFY;
+            enum DELETE;
+            enum DOMAIN_CHANGED;
+        }
+    }
+
+    notification database-changes {
+                description "EMS Database notifications";
+
+                leaf event-time {
+                    type string;
+                }
+
+                leaf operation {
+                    type operationEnum;
+                }
+                leaf object-name {
+                    type string;
+                }
+                leaf object-type {
+                    type string;
+                }
+                leaf row-id {
+                    type uint32;
+                }
+
+                leaf entity-category {
+                    type string;
+                }
+
+    }
+
+
+}

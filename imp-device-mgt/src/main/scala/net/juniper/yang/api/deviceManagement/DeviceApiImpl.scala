@@ -1,6 +1,6 @@
 package net.juniper.yang.api.deviceManagement
 
-import net.juniper.easyrest.ctx.ApiContext
+import net.juniper.easyrest.ctx.{ Page, ApiContext }
 import net.juniper.easyrest.persistence.{ DbaHelper, SqlSessionManager }
 import net.juniper.easyrest.yang.mapping.YangMappingDbaQuery
 import net.juniper.yang.mo.deviceManagement.Device
@@ -9,8 +9,8 @@ import net.juniper.yang.mo.ietfYangTypes.Uuid
 import scala.concurrent.{ Future, ExecutionContext }
 
 class DeviceApiImpl extends DeviceApi {
-  def getDeviceList(apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Seq[Device]]] = {
-    SqlSessionManager[Seq[Device]]("MySqlDS").openSession {
+  def getDeviceList(apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Page[Device]]] = {
+    SqlSessionManager[Page[Device]]("MySqlDS").openSession {
       session =>
         {
           val yangMappingDba = YangMappingDbaQuery(session, QueryDeviceOrm, apiCtx)
@@ -43,9 +43,9 @@ class DeviceApiImpl extends DeviceApi {
     }
   }
 
-  def deleteDevice(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Unit]] = {
+  def deleteDevice(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = {
     Future {
-      Some(Unit)
+      None
     }
   }
 }

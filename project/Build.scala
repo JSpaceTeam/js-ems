@@ -20,7 +20,7 @@ object Build extends Build {
   var gSettings = Defaults.coreDefaultSettings ++ Seq(
     scalaVersion  := "2.11.4",
     organization  := "net.juniper",
-    version       := "0.1.8",
+    version       := "0.1.9",
     scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
     libraryDependencies ++= Seq(
       "io.spray"            %%  "spray-can"     % sprayV                  withSources(),
@@ -31,10 +31,10 @@ object Build extends Build {
       "com.typesafe.akka"   %%  "akka-actor"    % akkaV                   withSources(),
       "com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test"        withSources(),
       "org.specs2"          %%  "specs2-core"   % "2.3.11"                withSources(),
-      "net.juniper"         %% "easy-rest-core" % "0.1.8"                 withSources(),
-      "net.juniper"         %% "easy-rest-persistence" % "0.1.8"          withSources(),
-      "net.juniper"         %% "easy-rest-orm" % "0.1.8"                  withSources(),
-      "net.juniper"         %% "easy-rest-integration-patterns" % "0.1.8" withSources(),
+      "net.juniper"         %% "easy-rest-core" % "0.1.9"                 withSources(),
+      "net.juniper"         %% "easy-rest-persistence" % "0.1.9"          withSources(),
+      "net.juniper"         %% "easy-rest-orm" % "0.1.9"                  withSources(),
+      "net.juniper"         %% "easy-rest-integration-patterns" % "0.1.9" withSources(),
       "ch.qos.logback"      %   "logback-classic" % "1.1.2"               withSources(),
       "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"           withSources()
     ),

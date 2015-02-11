@@ -26,7 +26,7 @@ object EventTestApp extends App with Configurable with LazyLogging {
 
   MessagingSubSystem.initStatus(MessagingSubSystem.start(ConfigFactory.parseString("""
        messaging:{
-         host: 10.150.113.192
+         host: 10.155.87.252
          port: 5445
         }
                                                                                    """)))

@@ -2,7 +2,7 @@ package net.juniper.ems.notifications
 
 import akka.actor.ActorRef
 import com.tailf.jnc.YangElement
-import net.juniper.easyrest.notification.EasyRestNotificationConstants.EndPoint
+import net.juniper.easyrest.notification.EasyRestNotificationConstants._
 import net.juniper.easyrest.notification.{ EasyRestNotificationHandler, NotificationSubscriptionManagerSubSystem }
 
 /**

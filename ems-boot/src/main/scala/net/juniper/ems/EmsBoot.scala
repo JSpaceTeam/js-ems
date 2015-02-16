@@ -6,6 +6,7 @@ import net.juniper.easyrest.persistence.DatabaseSupport
 import net.juniper.easyrest.subsystem.EasyRestIntegrationSubsystem
 import net.juniper.ems.notifications.EmsNotifications
 import net.juniper.yang.EmsServerAllRoutes
+import net.juniper.yang.api.commonModule.deviceManagement.DeviceManagementRoutes
 
 object EmsBoot extends App {
   new EmsBootstrap().start()
@@ -14,6 +15,6 @@ object EmsBoot extends App {
 class EmsBootstrap extends Bootstrap[EmsActor] with DatabaseSupport with EasyRestIntegrationSubsystem with EmsNotifications
 
 //This actor should be generated from Yang
-class EmsActor extends EasyRestActor with EmsServerAllRoutes {
-  def getRoute = emsServerAllRoutes
+class EmsActor extends EasyRestActor with EmsServerAllRoutes with DeviceManagementRoutes {
+  def getRoute = emsServerAllRoutes ~ deviceManagementRestApiRouting
 }

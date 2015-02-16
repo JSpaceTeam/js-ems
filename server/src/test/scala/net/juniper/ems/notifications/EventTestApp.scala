@@ -11,9 +11,8 @@ import net.juniper.easyrest.rest.EasyRestRoutingDSL
 import net.juniper.easyrest.streams.spray.{ StreamRegistry, StreamsRoute }
 import net.juniper.easyrest.streams.yang.Stream
 import net.juniper.easyrest.testkit.EasyRestRouteTest
-import net.juniper.yang.api.emsNotifications.EmsnotificationRoutes
+import net.juniper.yang.api.emsNotifications.EmsNotificationsRoutes
 import spray.routing._
-
 import scala.concurrent.duration._
 /**
  * Created by jalandip on 11/6/14.
@@ -26,7 +25,7 @@ object EventTestApp extends App with Configurable with LazyLogging {
 
   MessagingSubSystem.initStatus(MessagingSubSystem.start(ConfigFactory.parseString("""
        messaging:{
-         host: 10.150.113.192
+         host: 10.155.87.252
          port: 5445
         }
                                                                                    """)))
@@ -37,7 +36,7 @@ object EventTestApp extends App with Configurable with LazyLogging {
   server.start(Map[String, String]("port" -> "8080", "interface" -> "0.0.0.0"))
 }
 
-class TestActor extends EasyRestActor with TestStreamRoutes with EmsnotificationRoutes with EasyRestRouteTest {
+class TestActor extends EasyRestActor with TestStreamRoutes with EmsNotificationsRoutes with EasyRestRouteTest {
   def getRoute: Route = route()
 
   def route(): Route = {
@@ -51,7 +50,7 @@ class TestActor extends EasyRestActor with TestStreamRoutes with Emsnotification
       } ~
       path("eventsource.js") {
         getFromResource("eventsource.js")
-      } ~ emsnotificationRestApiRouting
+      } ~ emsNotificationsRestApiRouting
   }
 }
 

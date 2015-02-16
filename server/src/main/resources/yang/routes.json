@@ -1,0 +1,14 @@
+{
+  "name": "EmsServerAllRoutes",
+  "modules": [
+    {"name": "common-module", "subModules": [
+      {"name": "device-management"},
+      {"name": "image-management"},
+      {"name": "script-management"},
+      {"name": "template-management"},
+      {"name": "configlet-management"},
+      {"name": "configuration-file-management"}
+    ]},
+    {"name": "EmsNotifications"}
+  ]
+}

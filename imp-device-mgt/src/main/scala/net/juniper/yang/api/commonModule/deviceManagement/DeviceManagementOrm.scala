@@ -1,7 +1,7 @@
-package net.juniper.yang.api.deviceManagement
+package net.juniper.yang.api.commonModule.deviceManagement
 
-import net.juniper.easyrest.yang.mapping.{ YangMappingDbaQuery, YangMappingQueryDSL }
-import net.juniper.yang.mo.deviceManagement.Device
+import net.juniper.easyrest.yang.mapping.YangMappingQueryDSL
+import net.juniper.yang.mo.commonModule.deviceManagement.Device
 
 object QueryDeviceOrm extends YangMappingQueryDSL {
   mapping(_ => new Device)
@@ -18,16 +18,16 @@ object QueryDeviceOrm extends YangMappingQueryDSL {
   select("d.hostname") mapping "system/hostname"
   select("d.SerialNumber") mapping "system/serial"
   select("d.deviceFamily") mapping "system/family"
-  select("d.SoftwareRelease") mapping "system/osVersion"
+  select("d.SoftwareRelease") mapping "system/os-version"
   select("d.platform") mapping "system/platform"
   select("d.vendor") mapping "system/vendor"
   //  select("d.lastRebootedTimestamp") mapping "system/lastRebootTime"
   select("cm.ip") mapping "system/ip" from connMgtTable
-  select("cm.connectionType") mapping "mgtConnection/type" from connMgtTable mappingFunc {
+  select("cm.connectionType") mapping "mgt-connection/type" from connMgtTable mappingFunc {
     (value, record, session, apiCtx) =>
       "UNREACHABLE"
   }
-  select("dc.connStatus") mapping "mgtConnection/status" from connStatusTable mappingFunc {
+  select("dc.connStatus") mapping "mgt-connection/status" from connStatusTable mappingFunc {
     (value, record, session, apiCtx) =>
       if (value == null)
         "NA"
@@ -38,28 +38,28 @@ object QueryDeviceOrm extends YangMappingQueryDSL {
       else
         "NA"
   }
-  select("dc.authenticationStatus") mapping "mgtConnection/auth" from connStatusTable mappingFunc {
+  select("dc.authenticationStatus") mapping "mgt-connection/auth" from connStatusTable mappingFunc {
     (value, record, session, apiCtx) =>
       "NOT_AVAILABLE"
   }
-  select("d.webMgt") mapping "mgtConnection/webMgt"
+  select("d.webMgt") mapping "mgt-connection/web-mgt"
   select("d.redundancyGroupStatus") mapping "redundancy/status" mappingFunc {
     (value, record, session, apiCtx) =>
       "PRIMARY"
   }
-  select("d.dualREStatus") mapping "redundancy/masterRE"
+  select("d.dualREStatus") mapping "redundancy/master-re"
   //  select("d.hostingDevice_id") 		mapping "lsysInfo/lsysRoot/id"
   //  select("d.lsysCount") 			mapping "lsysInfo/lsysMembers/count"
-  select("cs.deviceState") mapping "configInfo/configStatus" from configStatusTable mappingFunc {
+  select("cs.deviceState") mapping "config-info/config-status" from configStatusTable mappingFunc {
     (value, record, session, apiCtx) =>
       "NONE"
   }
-  select("cs.ccState") mapping "configInfo/candidateConfigState" mappingFunc {
+  select("cs.ccState") mapping "config-info/candidate-config-state" mappingFunc {
     (value, record, session, apiCtx) =>
       "APPROVED"
   }
-  select("d.virtualChassisStatus") mapping "virtualChassisStatus" selectOption "optional"
-  select("d.trapTarget") mapping "trapTarget" selectOption "optional"
+  select("d.virtualChassisStatus") mapping "virtual-chassis-status" selectOption "optional"
+  select("d.trapTarget") mapping "trap-target" selectOption "optional"
   //  select("do.name") mapping "system/domainname" fromIndex 4
 
   postProcess((result, session, apiCtx) => {

@@ -17,12 +17,12 @@ object Build extends Build {
 
   val spray_jsonV = "1.2.6"
 
-  val easy_restV = "0.3.0"
+  val easy_restV = "0.3.1"
 
   var gSettings = Defaults.coreDefaultSettings ++ Seq(
     scalaVersion  := "2.11.4",
     organization  := "net.juniper",
-    version       := "0.3.0",
+    version       := "0.3.1",
     scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
     libraryDependencies ++= Seq(
       "io.spray"            %%  "spray-can"     % sprayV                     withSources(),
@@ -37,8 +37,9 @@ object Build extends Build {
       "net.juniper"         %% "easy-rest-persistence" % easy_restV          withSources(),
       "net.juniper"         %% "easy-rest-orm" % easy_restV                  withSources(),
       "net.juniper"         %% "easy-rest-integration-patterns" % easy_restV withSources(),
-      "net.juniper"         %% "js-yang-model" % "0.1.0"                     withSources(),
-      "ch.qos.logback"      %   "logback-classic" % "1.1.2"                  withSources(),
+      "net.juniper"         %% "js-yang-model" % "0.1.1"                     withSources(),
+      "net.juniper"         %  "jmpsubsystem"        % "14.1.2"              withSources()    intransitive(),
+      "ch.qos.logback"      %  "logback-classic" % "1.1.2"                   withSources(),
       "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"              withSources()
     ),
     EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Managed,
@@ -51,7 +52,10 @@ object Build extends Build {
     YangPlugin.yangPackageName := Some("net.juniper.yang"),
     publishMavenStyle := true,
     publishTo := Some(Resolver.file("file",  new File(System.getProperty("user.home") + "/mavenrepo/release"))),
-    resolvers += "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/mavenrepo/release",
+    resolvers += "JBoss Maven Repo" at "https://repository.jboss.org/nexus/content/repositories/releases",
+    resolvers += "JBoss 3rdParty Maven repo" at "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases",
+    resolvers += "BaseX Maven Repo" at "http://files.basex.org/maven",
+    resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL + "/mavenrepo/release",
     resolvers += "JSpace Maven Repo" at "http://10.155.87.253:8080/mavenrepo/release"
   ) ++ Revolver.settings ++ jacoco.settings ++ instrumentSettings ++ scalariformSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ XitrumPackage.copy() ++ YangPlugin.yangSettings
 

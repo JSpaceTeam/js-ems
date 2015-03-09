@@ -47,8 +47,8 @@ class JmsDbConsumerAndNotificationActor(endPoint: String) extends akka.camel.Con
     val dbNotification = new DatabaseChanges();
     dbNotification.setEventTimeValue(Notification.getTime());
     dbNotification.setEntityCategoryValue(msg.getEntityCategory)
-    dbNotification.setObjectNameValue(msg.getObjName)
-    dbNotification.setObjectTypeValue(msg.getObjType)
+    dbNotification.setObjectNameValue(msg.getObjectName)
+    dbNotification.setObjectTypeValue(msg.getObjectType)
     dbNotification.setRowIdValue(msg.getRowId)
     dbNotification.setOperationValue(msg.getJpaOperation.toString.toUpperCase)
     dbNotification

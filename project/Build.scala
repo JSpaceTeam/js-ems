@@ -17,7 +17,7 @@ object Build extends Build {
 
   val spray_jsonV = "1.2.6"
 
-  val easy_restV = "0.3.1"
+  val easy_restV = "0.3.2"
 
   var gSettings = Defaults.coreDefaultSettings ++ Seq(
     scalaVersion  := "2.11.4",
@@ -25,22 +25,12 @@ object Build extends Build {
     version       := "0.3.1",
     scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
     libraryDependencies ++= Seq(
-      "io.spray"            %%  "spray-can"     % sprayV                     withSources(),
-      "io.spray"            %%  "spray-routing" % sprayV                     withSources(),
-      "io.spray"            %%  "spray-client"  % sprayV                     withSources(),
-      "io.spray"            %%  "spray-json"    % spray_jsonV                withSources(),
-      "io.spray"            %%  "spray-testkit" % sprayV  % "test"           withSources(),
-      "com.typesafe.akka"   %%  "akka-actor"    % akkaV                      withSources(),
-      "com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test"           withSources(),
-      "org.specs2"          %%  "specs2-core"   % "2.3.11"                   withSources(),
       "net.juniper"         %% "easy-rest-core" % easy_restV                 withSources(),
       "net.juniper"         %% "easy-rest-persistence" % easy_restV          withSources(),
       "net.juniper"         %% "easy-rest-orm" % easy_restV                  withSources(),
       "net.juniper"         %% "easy-rest-integration-patterns" % easy_restV withSources(),
       "net.juniper"         %% "js-yang-model" % "0.1.1"                     withSources(),
-      "net.juniper"         %  "jmpsubsystem"        % "14.1.2"              withSources()    intransitive(),
-      "ch.qos.logback"      %  "logback-classic" % "1.1.2"                   withSources(),
-      "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"              withSources()
+      "net.juniper"         %  "jmpsubsystem"        % "14.1.2"              withSources()    intransitive()
     ),
     EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Managed,
     ScoverageKeys.minimumCoverage := 70,

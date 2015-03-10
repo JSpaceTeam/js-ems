@@ -51,10 +51,10 @@ object Build extends Build {
 
   lazy val root = Project("jspace-ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat") ++ Seq(publishArtifact := false)).aggregate(server, deviceMgt, emsBoot)
 
-  lazy val server = Project("jspace-ems-server", file("server"), settings = gSettings)
+  lazy val server = Project("ems-server", file("server"), settings = gSettings)
 
-  lazy val deviceMgt = Project("jspace-device-mgt", file("imp-device-mgt"), settings = gSettings).dependsOn(server)
+  lazy val deviceMgt = Project("device-mgt", file("imp-device-mgt"), settings = gSettings).dependsOn(server)
 
-  lazy val emsBoot = Project("jspace-ems-boot", file("ems-boot"), settings = gSettings).dependsOn(server, deviceMgt)
+  lazy val emsBoot = Project("ems-boot", file("ems-boot"), settings = gSettings).dependsOn(server, deviceMgt)
 
 }

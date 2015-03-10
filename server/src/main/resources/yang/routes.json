@@ -1,7 +1,7 @@
 {
   "name": "EmsServerAllRoutes",
   "modules": [
-    {"name": "common-module", "subModules": [
+    {"name": "iq-common-data-model", "subModules": [
       {"name": "device-management"},
       {"name": "image-management"},
       {"name": "script-management"},

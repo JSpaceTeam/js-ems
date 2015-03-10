@@ -1,12 +1,12 @@
-package net.juniper.yang.api.commonModule.deviceManagement
+package net.juniper.yang.api.iqCommonDataModel.deviceManagement
 
-import net.juniper.easyrest.ctx.{ Page, ApiContext }
-import net.juniper.easyrest.persistence.{ DbaHelper, SqlSessionManager }
+import net.juniper.easyrest.ctx.{ApiContext, Page}
+import net.juniper.easyrest.persistence.{DbaHelper, SqlSessionManager}
 import net.juniper.easyrest.yang.mapping.YangMappingDbaQuery
-import net.juniper.yang.api.commonModule.deviceManagement.DeviceApi
-import net.juniper.yang.mo.commonModule.deviceManagement.Device
 import net.juniper.yang.mo.ietfYangTypes.Uuid
-import scala.concurrent.{ Future, ExecutionContext }
+import net.juniper.yang.mo.iqCommonDataModel.deviceManagement.Device
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class DeviceApiImpl extends DeviceApi {
   def getDeviceList(apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Page[Device]]] = {

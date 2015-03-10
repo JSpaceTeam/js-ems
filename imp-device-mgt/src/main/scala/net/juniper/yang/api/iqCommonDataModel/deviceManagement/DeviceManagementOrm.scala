@@ -1,7 +1,7 @@
-package net.juniper.yang.api.commonModule.deviceManagement
+package net.juniper.yang.api.iqCommonDataModel.deviceManagement
 
 import net.juniper.easyrest.yang.mapping.YangMappingQueryDSL
-import net.juniper.yang.mo.commonModule.deviceManagement.Device
+import net.juniper.yang.mo.iqCommonDataModel.deviceManagement.Device
 
 object QueryDeviceOrm extends YangMappingQueryDSL {
   mapping(_ => new Device)

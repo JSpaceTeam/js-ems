@@ -17,12 +17,12 @@ object Build extends Build {
 
   val spray_jsonV = "1.2.6"
 
-  val easy_restV = "0.3.3"
+  val easy_restV = "0.3.4"
 
   var gSettings = Defaults.coreDefaultSettings ++ Seq(
     scalaVersion  := "2.11.4",
     organization  := "net.juniper",
-    version       := "0.3.3",
+    version       := "0.3.4",
     scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
     libraryDependencies ++= Seq(
       "net.juniper"         %% "easy-rest-core" % easy_restV                 withSources(),
@@ -49,11 +49,11 @@ object Build extends Build {
     resolvers += "JSpace Maven Repo" at "http://10.155.87.253:8080/mavenrepo/release"
   ) ++ Revolver.settings ++ jacoco.settings ++ instrumentSettings ++ scalariformSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ XitrumPackage.copy() ++ YangPlugin.yangSettings
 
-  lazy val root = Project("jspace-ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat") ++ Seq(publishArtifact := false)).aggregate(server, deviceMgt, emsBoot)
+  lazy val root = Project("ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat") ++ Seq(publishArtifact := false)).aggregate(server, deviceMgt, emsBoot)
 
   lazy val server = Project("ems-server", file("server"), settings = gSettings)
 
-  lazy val deviceMgt = Project("device-mgt", file("imp-device-mgt"), settings = gSettings).dependsOn(server)
+  lazy val deviceMgt = Project("ems-device-mgt", file("imp-device-mgt"), settings = gSettings).dependsOn(server)
 
   lazy val emsBoot = Project("ems-boot", file("ems-boot"), settings = gSettings).dependsOn(server, deviceMgt)
 

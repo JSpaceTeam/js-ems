@@ -17,19 +17,19 @@ object Build extends Build {
 
   val spray_jsonV = "1.2.6"
 
-  val easy_restV = "0.3.4"
+  val easy_restV = "0.3.5"
 
   var gSettings = Defaults.coreDefaultSettings ++ Seq(
     scalaVersion  := "2.11.4",
     organization  := "net.juniper",
-    version       := "0.3.4",
+    version       := "0.3.5",
     scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
     libraryDependencies ++= Seq(
       "net.juniper"         %% "easy-rest-core" % easy_restV                 withSources(),
       "net.juniper"         %% "easy-rest-persistence" % easy_restV          withSources(),
       "net.juniper"         %% "easy-rest-orm" % easy_restV                  withSources(),
       "net.juniper"         %% "easy-rest-integration-patterns" % easy_restV withSources(),
-      "net.juniper"         %% "js-yang-model" % "0.1.2"                     withSources(),
+      "net.juniper"         %% "js-yang-model" % "0.1.3"                     withSources(),
       "net.juniper"         %  "jmpsubsystem"        % "14.1.2"              withSources()    intransitive()
     ),
     EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Managed,

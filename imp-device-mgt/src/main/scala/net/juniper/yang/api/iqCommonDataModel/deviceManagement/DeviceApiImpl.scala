@@ -9,14 +9,31 @@ import net.juniper.yang.mo.iqCommonDataModel.deviceManagement.Device
 import scala.concurrent.{ ExecutionContext, Future }
 
 class DeviceApiImpl extends DeviceApi {
-  def getDeviceList(apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Page[Device]]] = {
+  //TODO will be implementd via EJB invoke
+  def getDeviceList(apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Seq[Device]] = {
     SqlSessionManager[Page[Device]]("MySqlDS").openSession {
       session =>
         {
           val yangMappingDba = YangMappingDbaQuery(session, QueryDeviceOrm, apiCtx)
           DbaHelper.execute(yangMappingDba)
         }
+    }.map[Seq[Device]] {
+      result =>
+        result.get.records
     }
+  }
+
+  def getDeviceCount(apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Long] = {
+    SqlSessionManager[Page[Device]]("MySqlDS").openSession {
+      session =>
+        {
+          val yangMappingDba = YangMappingDbaQuery(session, QueryDeviceOrm, apiCtx)
+          DbaHelper.execute(yangMappingDba)
+        }
+    }.map[Long](
+      result =>
+        result.get.totalRecords
+    )
   }
 
   def updateDevice(device: Device, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = {
@@ -43,9 +60,9 @@ class DeviceApiImpl extends DeviceApi {
     }
   }
 
-  def deleteDevice(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Option[Device]] = {
+  def deleteDevice(uuid: Uuid, apiCtx: ApiContext)(implicit ec: ExecutionContext): Future[Boolean] = {
     Future {
-      None
+      true
     }
   }
 }

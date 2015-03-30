@@ -33,8 +33,8 @@ object NotificationFactory {
 
     import scala.concurrent.duration._
     implicit val timeout = Timeout(10 second)
-    var f: Future[Any] = MessagingSubSystem.messagingActor.ask(StartConsumerFor(Props(classOf[JmsDbConsumerAndNotificationActor], DB_NOTIFICATION_ENDPOINT), uri))
-    var consumer: ConsumerCreatedAck = Await.result(f, 5 second).asInstanceOf[ConsumerCreatedAck]
+    val f: Future[Any] = MessagingSubSystem.messagingActor.ask(StartConsumerFor(Props(classOf[JmsDbConsumerAndNotificationActor], DB_NOTIFICATION_ENDPOINT), uri))
+    val consumer: ConsumerCreatedAck = Await.result(f, 5 second).asInstanceOf[ConsumerCreatedAck]
     consumer.consumer
   }
 

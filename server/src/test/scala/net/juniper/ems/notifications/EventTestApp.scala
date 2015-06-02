@@ -58,11 +58,12 @@ trait TestStreamRoutes extends EasyRestRoutingDSL with StreamsRoute with HttpSer
 
   implicit val routingSetting: RoutingSettings = spray.routing.RoutingSettings.default
 
-  StreamRegistry.registerStream(new Stream()
-    .name("database-changes")
-    .description("Stream for all database change events")
-    .replaySupport("false")
-    .events(""))
+  val stream = new Stream()
+  stream.setNameValue("database-changes")
+  stream.setDescriptionValue("Stream for all database change events")
+  stream.setReplaySupportValue("false")
+  stream.setEventValue("")
+  StreamRegistry.registerStream(stream)
 
   def getRoute(sseProcessor: ActorRef) = streamsRestRouting
 }

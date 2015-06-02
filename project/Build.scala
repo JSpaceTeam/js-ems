@@ -17,7 +17,7 @@ object Build extends Build {
 
   val spray_jsonV = "1.2.6"
 
-  val easy_restV = "0.3.6"
+  val easy_restV = "0.6.9"
 
   var gSettings = Defaults.coreDefaultSettings ++ Seq(
     scalaVersion  := "2.11.4",
@@ -27,9 +27,8 @@ object Build extends Build {
     libraryDependencies ++= Seq(
       "net.juniper"         %% "easy-rest-core" % easy_restV                 withSources(),
       "net.juniper"         %% "easy-rest-persistence" % easy_restV          withSources(),
-      "net.juniper"         %% "easy-rest-orm" % easy_restV                  withSources(),
       "net.juniper"         %% "easy-rest-integration-patterns" % easy_restV withSources(),
-      "net.juniper"         %% "js-yang-model" % "0.1.3"                     withSources(),
+      "net.juniper"         %% "js-yang-model"       % "0.1.3"                     withSources(),
       "net.juniper"         %  "jmpsubsystem"        % "14.1.2"              withSources()    intransitive()
     ),
     EclipseKeys.createSrc := EclipseCreateSrc.Default + EclipseCreateSrc.Managed,
@@ -49,12 +48,10 @@ object Build extends Build {
     resolvers += "JSpace Maven Repo" at "http://10.155.87.253:8080/mavenrepo/release"
   ) ++ Revolver.settings ++ jacoco.settings ++ instrumentSettings ++ scalariformSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ XitrumPackage.copy() ++ YangPlugin.yangSettings
 
-  lazy val root = Project("ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat") ++ Seq(publishArtifact := false)).aggregate(server, deviceMgt, emsBoot)
+  lazy val root = Project("ems", file("."), settings = gSettings ++ XitrumPackage.copy("configuration", "bin/run.sh", "bin/run.bat") ++ Seq(publishArtifact := false)).aggregate(server, emsBoot)
 
   lazy val server = Project("ems-server", file("server"), settings = gSettings)
 
-  lazy val deviceMgt = Project("ems-device-mgt", file("imp-device-mgt"), settings = gSettings).dependsOn(server)
-
-  lazy val emsBoot = Project("ems-boot", file("ems-boot"), settings = gSettings).dependsOn(server, deviceMgt)
+  lazy val emsBoot = Project("ems-boot", file("ems-boot"), settings = gSettings).dependsOn(server)
 
 }
